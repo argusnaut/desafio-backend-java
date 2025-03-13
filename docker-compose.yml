@@ -1,0 +1,12 @@
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: argusnaut
+      POSTGRES_DB: default_database
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Data
 @Entity
@@ -14,9 +15,13 @@ public class Projeto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String nome;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
     private LocalDateTime data_criacao;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "projeto_funcionario",
             joinColumns = @JoinColumn(name = "projeto_id"),

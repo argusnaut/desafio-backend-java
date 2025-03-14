@@ -17,7 +17,4 @@ public class Funcionario {
     private String cpf;
     private String email;
     private BigDecimal salario;
-
-    @ManyToMany(mappedBy = "funcionarios")
-    private List<Projeto> projetos;
 }

@@ -1,5 +1,6 @@
 package br.com.argusnaut.desafio_backend_java.controller;
 
+import br.com.argusnaut.desafio_backend_java.dto.ProjetoDTO;
 import br.com.argusnaut.desafio_backend_java.model.Projeto;
 import br.com.argusnaut.desafio_backend_java.service.ProjetoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,17 @@ public class ProjetoController {
     private ProjetoService service;
 
     @PostMapping
-    public Projeto createProjeto(@RequestBody Projeto projeto) {
+    public ProjetoDTO createProjeto(@RequestBody Projeto projeto) {
         return service.createProjeto(projeto);
     }
 
     @GetMapping
-    public List<Projeto> getAllProjetos() {
+    public List<ProjetoDTO> getAllProjetos() {
         return service.getAllProjetos();
     }
 
     @GetMapping("/{id}")
-    public Projeto getProjetoById(@PathVariable UUID id) {
+    public ProjetoDTO getProjetoById(@PathVariable UUID id) {
         return service.getProjetoById(id);
     }
 }

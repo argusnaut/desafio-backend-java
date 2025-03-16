@@ -1,16 +1,17 @@
 package br.com.argusnaut.desafio_backend_java.service;
 
+import br.com.argusnaut.desafio_backend_java.dto.ProjetoDTO;
 import br.com.argusnaut.desafio_backend_java.model.Funcionario;
 import br.com.argusnaut.desafio_backend_java.model.Projeto;
 import br.com.argusnaut.desafio_backend_java.repository.FuncionarioRepository;
 import br.com.argusnaut.desafio_backend_java.repository.ProjetoRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjetoService {
@@ -21,7 +22,7 @@ public class ProjetoService {
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public Projeto createProjeto(Projeto projeto) {
+    public ProjetoDTO createProjeto(@Valid Projeto projeto) {
         if (projeto.getFuncionarios() == null) {
             projeto.setFuncionarios(new ArrayList<>());
         }
@@ -40,14 +41,17 @@ public class ProjetoService {
 
         projeto.setFuncionarios(funcionariosToAssociate);
 
-        return projetoRepository.save(projeto);
+        return ProjetoDTO.toDTO(projetoRepository.save(projeto));
     }
 
-    public List<Projeto> getAllProjetos() {
-        return projetoRepository.findAll();
+    public List<ProjetoDTO> getAllProjetos() {
+        return projetoRepository.findAll().stream()
+                .map(ProjetoDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Projeto getProjetoById(UUID id) {
-        return projetoRepository.findById(id).orElse(null);
+    public ProjetoDTO getProjetoById(UUID id) {
+        Optional<Projeto> optionalProjeto = projetoRepository.findById(id);
+        return optionalProjeto.map(ProjetoDTO::toDTO).orElse(null);
     }
 }

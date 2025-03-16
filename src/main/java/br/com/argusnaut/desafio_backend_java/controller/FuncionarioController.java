@@ -1,5 +1,6 @@
 package br.com.argusnaut.desafio_backend_java.controller;
 
+import br.com.argusnaut.desafio_backend_java.dto.FuncionarioDTO;
 import br.com.argusnaut.desafio_backend_java.model.Funcionario;
 import br.com.argusnaut.desafio_backend_java.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,17 @@ public class FuncionarioController {
     private FuncionarioService service;
 
     @PostMapping
-    public Funcionario createFuncionario(@RequestBody Funcionario funcionario) {
+    public FuncionarioDTO createFuncionario(@RequestBody Funcionario funcionario) {
         return service.createFuncionario(funcionario);
     }
 
     @GetMapping
-    public List<Funcionario> getAllFuncionarios() {
+    public List<FuncionarioDTO> getAllFuncionarios() {
         return service.getAllFuncionarios();
     }
 
     @GetMapping("/{id}")
-    public Funcionario getFuncionarioById(@PathVariable UUID id) {
+    public FuncionarioDTO getFuncionarioById(@PathVariable UUID id) {
         return service.getFuncionarioById(id);
     }
 }

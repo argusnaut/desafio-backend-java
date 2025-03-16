@@ -1,6 +1,8 @@
 package br.com.argusnaut.desafio_backend_java.model;
 
+import br.com.argusnaut.desafio_backend_java.exception.InvalidCpfException;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FuncionarioTest {
@@ -30,11 +32,11 @@ public class FuncionarioTest {
         Funcionario funcionario = new Funcionario();
         String cpf = "1234567890"; // CPF com menos de 11 dígitos
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        InvalidCpfException exception = assertThrows(InvalidCpfException.class, () -> {
             funcionario.setCpf(cpf);
         });
 
-        assertEquals("O CPF deve conter exatamente 11 números.", exception.getMessage());
+        assertEquals("O CPF deve conter exatamente 11 números", exception.getMessage());
     }
 
     @Test
@@ -42,11 +44,11 @@ public class FuncionarioTest {
         Funcionario funcionario = new Funcionario();
         String cpf = "1234567890A"; // CPF letras
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        InvalidCpfException exception = assertThrows(InvalidCpfException.class, () -> {
             funcionario.setCpf(cpf);
         });
 
-        assertEquals("O CPF deve conter exatamente 11 números.", exception.getMessage());
+        assertEquals("O CPF deve conter exatamente 11 números", exception.getMessage());
     }
 
     @Test

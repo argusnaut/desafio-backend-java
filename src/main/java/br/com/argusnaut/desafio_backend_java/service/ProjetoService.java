@@ -1,6 +1,8 @@
 package br.com.argusnaut.desafio_backend_java.service;
 
 import br.com.argusnaut.desafio_backend_java.dto.ProjetoDTO;
+import br.com.argusnaut.desafio_backend_java.exception.FuncionarioNotFoundException;
+import br.com.argusnaut.desafio_backend_java.exception.ProjetoNotFoundException;
 import br.com.argusnaut.desafio_backend_java.model.Funcionario;
 import br.com.argusnaut.desafio_backend_java.model.Projeto;
 import br.com.argusnaut.desafio_backend_java.repository.FuncionarioRepository;
@@ -29,14 +31,18 @@ public class ProjetoService {
 
         List<Funcionario> funcionariosToAssociate = new ArrayList<>();
         for (Funcionario funcionario : projeto.getFuncionarios()) {
-            if (funcionario.getId() != null) {
-                Funcionario existingFuncionario = funcionarioRepository.findById(funcionario.getId())
-                        .orElseThrow(() -> new RuntimeException("Funcionario not found with id: " + funcionario.getId()));
-                funcionariosToAssociate.add(existingFuncionario);
-            } else {
-                Funcionario newFuncionario = funcionarioRepository.save(funcionario);
-                funcionariosToAssociate.add(newFuncionario);
-            }
+            Optional.ofNullable(funcionario.getId())
+                    .ifPresentOrElse(
+                            id -> {
+                                Funcionario existingFuncionario = funcionarioRepository.findById(id)
+                                        .orElseThrow(() -> new FuncionarioNotFoundException(id.toString()));
+                                funcionariosToAssociate.add(existingFuncionario);
+                            },
+                            () -> {
+                                Funcionario newFuncionario = funcionarioRepository.save(funcionario);
+                                funcionariosToAssociate.add(newFuncionario);
+                            }
+                    );
         }
 
         projeto.setFuncionarios(funcionariosToAssociate);
@@ -52,6 +58,6 @@ public class ProjetoService {
 
     public ProjetoDTO getProjetoById(UUID id) {
         Optional<Projeto> optionalProjeto = projetoRepository.findById(id);
-        return optionalProjeto.map(ProjetoDTO::toDTO).orElse(null);
+        return optionalProjeto.map(ProjetoDTO::toDTO).orElseThrow(() -> new ProjetoNotFoundException(id.toString()));
     }
 }

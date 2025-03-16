@@ -23,8 +23,7 @@ public class FuncionarioDTO {
 
     public static Funcionario toDomain(FuncionarioDTO dto) {
         return Funcionario.builder().id(dto.getId()).nome(dto.getNome()).cpf(dto.getCpf()).email(dto.getEmail())
-                .salario(dto.getSalario())
-                .build();
+                .salario(dto.getSalario()).build();
     }
 
     public static FuncionarioDTO toDTO(Funcionario funcionario) {

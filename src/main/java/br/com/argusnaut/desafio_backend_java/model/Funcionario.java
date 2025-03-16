@@ -1,5 +1,6 @@
 package br.com.argusnaut.desafio_backend_java.model;
 
+import br.com.argusnaut.desafio_backend_java.exception.InvalidCpfException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -45,7 +46,7 @@ public class Funcionario {
         } else if (cpf.matches("\\d{11}")) {
             this.cpf = cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
         } else {
-            throw new IllegalArgumentException("O CPF deve conter exatamente 11 números.");
+            throw new InvalidCpfException();
         }
     }
 }

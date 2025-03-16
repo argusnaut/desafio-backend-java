@@ -1,6 +1,7 @@
 package br.com.argusnaut.desafio_backend_java.service;
 
 import br.com.argusnaut.desafio_backend_java.dto.FuncionarioDTO;
+import br.com.argusnaut.desafio_backend_java.exception.FuncionarioNotFoundException;
 import br.com.argusnaut.desafio_backend_java.model.Funcionario;
 import br.com.argusnaut.desafio_backend_java.repository.FuncionarioRepository;
 import org.junit.jupiter.api.Test;
@@ -86,9 +87,11 @@ public class FuncionarioServiceTest {
         UUID id = UUID.randomUUID();
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        FuncionarioDTO result = service.getFuncionarioById(id);
+        FuncionarioNotFoundException exception = assertThrows(FuncionarioNotFoundException.class, () -> {
+            service.getFuncionarioById(id);
+        });
 
-        assertNull(result);
+        assertEquals("Funcionário não encontrado com ID: " + id, exception.getMessage());
         verify(repository, times(1)).findById(id);
     }
 }

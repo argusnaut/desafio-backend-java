@@ -1,6 +1,7 @@
 package br.com.argusnaut.desafio_backend_java.service;
 
 import br.com.argusnaut.desafio_backend_java.dto.ProjetoDTO;
+import br.com.argusnaut.desafio_backend_java.exception.ProjetoNotFoundException;
 import br.com.argusnaut.desafio_backend_java.model.Funcionario;
 import br.com.argusnaut.desafio_backend_java.model.Projeto;
 import br.com.argusnaut.desafio_backend_java.repository.FuncionarioRepository;
@@ -108,9 +109,11 @@ public class ProjetoServiceTest {
         UUID projetoId = UUID.randomUUID();
         when(projetoRepository.findById(projetoId)).thenReturn(Optional.empty());
 
-        ProjetoDTO result = projetoService.getProjetoById(projetoId);
+        ProjetoNotFoundException exception = assertThrows(ProjetoNotFoundException.class, () -> {
+            projetoService.getProjetoById(projetoId);
+        });
 
-        assertNull(result);
+        assertEquals("Projeto não encontrado com ID: " + projetoId, exception.getMessage());
         verify(projetoRepository, times(1)).findById(projetoId);
     }
 }
